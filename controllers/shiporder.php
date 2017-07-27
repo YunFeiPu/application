@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class shiporder extends CI_Controller {
+class Shiporder extends CI_Controller {
 
 	/**
 	 * 采购分单 
