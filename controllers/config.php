@@ -16,4 +16,8 @@ class Config extends CI_Controller {
 		$this->load->model('config_m');
 		$this->config_m->set_item('order_date',$item_value);
 	}
+	
+	function testmyjob(){
+		
+	}
 }
