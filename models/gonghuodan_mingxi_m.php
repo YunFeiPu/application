@@ -147,10 +147,18 @@ select gonghuodan_mingxi.*,gonghuodan.ghd_date,id_gys from gonghuodan_mingxi lef
 	
 	
 	/***
-	 * 添加当天没有的供货单明细 一条
+	 * 添加当天没有的供货单明细 可能是库存也可能是退货
 	 */
-	function addgonghuodanmingxi($ghd_id,$pid,$p_qty,$ghd_inprice,$ghd_mx_heji){
-		$this->insert($ghd_id, $p_id, $p_qty, $ghd_inprice, $ghd_mx_heji, 1, '库存');
+	function addgonghuodanmingxi($ghd_id,$pid,$p_qty,$ghd_inprice,$ghd_mx_heji,$p_qty){
+		$bak = "";
+		if($p_qty>0)
+		{
+			$bak ="库存";
+		}
+		else{
+			$bak = "缺货";
+		}
+		$this->insert($ghd_id, $p_id, $p_qty, $ghd_inprice, $ghd_mx_heji, $p_qty, $bak);
 	}
 	
 }
