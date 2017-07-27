@@ -1,0 +1,13 @@
+/cache/
+/config/
+/controllers_bak/
+/core/
+/errors/
+/helpers/
+/hooks/
+/language/
+/libraries/
+/logs/
+/third_party/
+/zmodels_bak/
+/zviews_bak/
