@@ -299,11 +299,15 @@ VALUES
 	}
 	
 	/***
-	 * 查询明细
+	 * 查询明细 显示供货单的明细
 	 */
 	function mx(){
 		parent::islogin();
 		$ghd_id = $this->uri->segment(3,0);
+		if($ghd_id == 0){
+			return;
+		}
+		$data["ghd_id"] = $ghd_id;
 		$this->load->model('gonghuodan_mingxi_m','mx');
 		$query = $this->mx->getghdmxlistbyghdid($ghd_id);
 		if(isset($query)){
@@ -352,20 +356,46 @@ VALUES
 	
 	function updatemx(){
 		parent::islogin();
-		//return "aaa";
 		$modi_mx = json_decode($_POST['item']);
-
-		/*
-		$modi_mx = (object) array(
-				'ghd_mx_id' => '1212',
+		$this->load->model('gonghuodan_mingxi_m');
+		
+		/*$modi_mx = (object) array(
+				'ghd_id' => '1',
+				'ghd_mx_id' => '0',
 				'p_qty' => '54',
 				'ghd_inprice' => '22.00',
 				'ghd_date' => '2017-07-14',
 				'p_id' => '3122',
+				'pname' => '',
 				'id_gys' => '164'
-		);*/
+		);
+		*/
+		//如果ghd_mx_id 为0 新添加的项目 如果p_id = 0为新添加的产品
+		if($modi_mx->ghd_mx_id == 0){
+			//添加新的供货单明细
+			//1. 首先要把产品的id获取
+			$this->load->model('product_m');
+			$product = $this->product_m->getbypname($modi_mx->pname);
+			if(isset($product)){
+				$modi_mx->p_id = $product->id;
+			}
+			
+			$mx_id = $this->gonghuodan_mingxi_m->addgonghuodanmingxi( $modi_mx->ghd_id,
+															 $modi_mx->p_id,
+															 $modi_mx->p_qty,
+															$modi_mx->ghd_inprice,
+															$modi_mx->ghd_inprice*$modi_mx->p_qty,
+															$modi_mx->p_qty);
+			
+			$obj_mx = $this->gonghuodan_mingxi_m->getghdmxbymxid($mx_id);
+			$obj_mx->pname = $modi_mx->pname;
+			
+			//$arr = array ('ghd_mx_id'=>$mx_id,'ghd_mx_bak'=>$,'c'=>3,'d'=>4,'e'=>5);
+			echo json_encode($obj_mx);
+		}
+		else{
 		
-		$this->load->model('gonghuodan_mingxi_m');
+		
 		$c_mx = $this->gonghuodan_mingxi_m->getghdmxbymxid($modi_mx->ghd_mx_id);
 		$sql = "select gonghuodan_mingxi_bak.* 
 from gonghuodan_mingxi_bak 
@@ -425,6 +455,9 @@ and gonghuodan_mingxi_bak.p_id = ? ";
 			
 			$this->gonghuodan_mingxi_m->save_mx($c_mx);
 			
+			
+			echo json_encode($c_mx);
+		}
 		
 	}
 	

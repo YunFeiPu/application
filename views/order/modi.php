@@ -196,7 +196,7 @@ $((function($){
   			var _orderInfo = '{"id":"'+ $oid +'","cname":"' + _cName +'","pname":"' + _pName +'","price":"'+_price+'","qty":"'+ _qty +'","total":"'+ _total +'"}' ;
   	        alert(pname+"已经合并");
   	        var _updateRequest = $.ajax({
-  	                url: "http://www.51taotaole.com/order/ajaxOrderUpdate",
+  	                url: "<? echo base_url(); ?>order/ajaxOrderUpdate",
   	                type: "POST",
   	                data: { order : _orderInfo},
   	                cache: false,
@@ -248,7 +248,7 @@ $((function($){
       var _orderInfo = '{"id":"'+ $oid +'","cname":"' + _cName +'","pname":"' + _pName +'","price":"'+_price+'","qty":"'+ _qty +'","total":"'+ _total +'"}' ;
      // alert(_orderInfo);
       var _updateRequest = $.ajax({
-              url: "http://www.51taotaole.com/order/ajaxOrderUpdate",
+              url: "<? echo base_url(); ?>order/ajaxOrderUpdate",
               type: "POST",
               data: { order : _orderInfo},
               cache: false,
@@ -343,7 +343,7 @@ $((function($){
   function getproductbypname(pname,isquick){
 	  //alert("function getproductbypname");
   	var arequest = $.ajax({
-          url:"http://www.51taotaole.com/ajax/getproductbyname",
+          url:"<? echo base_url(); ?>ajax/getproductbyname",
           type:"POST",
           data:{description:pname},
           cache:false,
@@ -359,7 +359,7 @@ $((function($){
       
           $("#txtpset").val(obj.pset);
           var pricerequest = $.ajax({
-	          url:"http://www.51taotaole.com/ajax/getproductprice",
+	          url:"<? echo base_url(); ?>ajax/getproductprice",
 	          type:"POST",
 	          data:{cname:cname,pname:pname},
 	          cache:false,
@@ -441,7 +441,7 @@ $((function($){
                 $oid = $(this).parent().parent().attr("id");               
                 
                 var _updateRequest = $.ajax({
-                url: "http://www.51taotaole.com/order/ajaxOrderItemDele",
+                url: "<? echo base_url(); ?>order/ajaxOrderItemDele",
                 type: "POST",
                 data: { oid : $oid},
                 cache: false,
@@ -649,7 +649,7 @@ $(function(){
         var j = jQuery.parseJSON(obj);
         var order = obj;
         var request = $.ajax({
-                url: "http://www.51taotaole.com/order/OrderModiAddProduct",
+                url: "<? echo base_url(); ?>order/OrderModiAddProduct",
                 type: "POST",
                 data: { order : order},
                 cache: false,
@@ -843,7 +843,7 @@ $(function(){
     $(".category").click(function(){        
         var description = $(this).html();
         var request = $.ajax({
-                url: "http://www.51taotaole.com/ajax/getproductbydescription",
+                url: "<? echo base_url(); ?>ajax/getproductbydescription",
                 type: "POST",
                 data: { description : description},
                 cache: false,
@@ -864,7 +864,7 @@ $(function(){
                             $("#txtpname").val($( this ).html());
                             var desc = $( this ).html();
                             var arequest = $.ajax({
-                                url:"http://www.51taotaole.com/ajax/getproductbyname",
+                                url:"<? echo base_url(); ?>ajax/getproductbyname",
                                 type:"POST",
                                 data:{description:desc},
                                 cache:false,
@@ -880,7 +880,7 @@ $(function(){
                             
                                 $("#txtpset").val(obj.pset);
                                 var pricerequest = $.ajax({
-                                url:"http://www.51taotaole.com/ajax/getproductprice",
+                                url:"<? echo base_url(); ?>ajax/getproductprice",
                                 type:"POST",
                                 data:{cname:cname,pname:pname},
                                 cache:false,
@@ -1159,7 +1159,7 @@ ue.ready(function() {
 			 var html = ue.getContent();
 		 	var oid = $("#hidden_oid").val();
 			var _updateRequest = $.ajax({
-  	                url: "http://www.51taotaole.com/order/ajaxOrderPicUpdate",
+  	                url: "<? echo base_url(); ?>order/ajaxOrderPicUpdate",
   	                type: "POST",
   	                data: { oid : oid,content : html},
   	                cache: false,
