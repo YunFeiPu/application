@@ -85,6 +85,12 @@ class Product extends CI_Controller {
             if(!empty($query))
             {
                 $data['product'] = $query;
+                $sql = "select productid, price from groupproductprice where productid = ? group by price";
+                $item_list = $this->db->query($sql,array($pid));
+                if($item_list->num_rows()>0){
+                	$data["item_list"] = $item_list->result();
+                }
+                		
             }
             else{
                 redirect('product/add');

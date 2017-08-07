@@ -45,6 +45,7 @@
 				$( "#mysubmit" ).click(function(){
 					window.location.href = "./gonghuodan/"+$( "#v_sdate" ).val();
 				});
+				
 
 			});
 				</script>
@@ -52,6 +53,7 @@
 				</head>
 				<body>
 				<h3>查看订货单据</h3>
+				
 				<?php echo form_open('gonghuodan/index'); ?>
    请选择配送日期<?php
             $data = array(

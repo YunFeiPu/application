@@ -2,16 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>订单列表</title>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" rev="stylesheet" href="../css/global.css" type="text/css"
-        media="all" />
-    <link href="../css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
-
-    <script type="text/javascript" src="<?php echo base_url()?>scripts/jquery.js"></script>
-
-    <script type="text/javascript" src="../scripts/global.js"></script>
-    
-	<script src="<?php echo base_url()?>scripts/jquery-ui.js"></script>
+ <?php $this->load->view('head.php');?>
     <script src="<?php echo base_url()?>scripts/order_add_header.js?888"></script>    
  	<style type="text/css">
  		 ul{list-style:none;} 
@@ -22,7 +13,128 @@
  	</style>
         
 <script>
+$(function(){
+	var _vpname = $("#txtpname"),
+		_vpset = $("#txtpset"),
+		_vprice = $("#txtprice"),
+		_vqty = $("#txtqty"),
+		_vtotal = $("#txttotal"),
+		_vcname = $("#v_cname"),
+		_vsdate = $("#v_sdate"),
+		_vpsearch = $("#txtpsearch"),
+		allFields1 = $( [] ).add( _vcname ).add(_vpsearch).add(_vsdate),
+		allFields = $( [] ),
+	    dateRegex = /^((((1[6-9]|[2-9]\d)\d{2})-(0?[13578]|1[02])-(0?[1-9]|[12]\d|3[01]))|(((1[6-9]|[2-9]\d)\d{2})-(0?[13456789]|1[012])-(0?[1-9]|[12]\d|30))|(((1[6-9]|[2-9]\d)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))-0?2-29-))$/,
+	    tips1 = $( ".validateTips1" ),
+	    tips = $( ".validateTips" );
+	function updateTips( c,t ) {
+        c
+          .text( t )
+          .addClass( "ui-state-highlight" );
+        setTimeout(function() {
+          c.removeClass( "ui-state-highlight", 1500 );
+        }, 500 );
+      }
+   
+      function checkLength( o, n, min, max,c ) {
+  
+        if ( o.val().length > max || o.val().length < min ) {
+          o.addClass( "ui-state-error" );
+          updateTips( c,n + "的长度必须 必须 " +
+            min + " 和 " + max + "位之间" );
+          return false;
+        } else {
+          return true;
+        }
+      }
+   
+      function checkRegexp( o, regexp, n ,c) {
+        if ( !( regexp.test( o.val() ) ) ) {
+          o.addClass( "ui-state-error" );
+          updateTips( c,n );
+          return false;
+        } else {
+          return true;
+        }
+      }
 
+      function checkPrice(o,s,n,c){
+		if(o.val()<=s.val()){
+			o.addClass( "ui-state-error" );
+			updateIips( c,n );
+			return false;
+		} else {
+			return true;
+		}
+	  }
+
+	function _getproduct(n,c,d){
+		 var info = '{"pname":"'+ n	+
+    	 '","cname":"'+ c +
+    	 '","sdate":"'  + d +
+    	 '"}' ;	
+    	 alert(info);
+		var arequest = $.ajax({
+	        url:"<?php echo base_url()?>ajax/getproductinfobyname",
+	        type:"POST",
+	        data:{ data:info },
+	        cache:false,
+	        dataType:"html"
+	    });
+	    
+	    arequest.done(function(msg){
+	        //ajax 获取产品的单价
+	        alert(msg);
+	        /*
+	       	var _pprice;
+	        var cname = $("#v_cname").val();
+			var obj = eval ("(" + msg+ ")");
+	    	
+	        $("#txtpset").val(obj.pset);
+	        $("#inprice").val(obj.pprice);
+	        alert(obj.pset);
+*/
+	    });
+
+					
+	}
+
+    var availableTags = [
+        <?php $_ii =0;?>
+      <?php foreach($product_list as $item) :?>
+       <?php           if($_ii>0){
+                      echo ',';
+                  } ?>
+   '<?php echo $item->pname;$_ii++; ?>'
+    <?php endforeach;?>
+    ];
+    _vpsearch.autocomplete({
+      source: availableTags,
+      close: function( event, ui ) {
+    	 
+	    	var valid = true;
+	        allFields1.removeClass( "ui-state-error" );
+	   
+	        valid = valid && checkLength( _vcname, "用户名", 1, 30 ,tips1 );
+	        valid = valid && checkLength( _vsdate, "批发价格", 1, 10, tips1 );
+	        valid = valid && checkLength( _vpsearch, "生效日期", 1, 50, tips1 );
+	
+	        valid = valid && checkRegexp( _vsdate, dateRegex, "日期的格式不正确", tips1 );	   
+	    		 
+			if(valid){
+	        	$("#hidden_cindex").val("0");
+	  	  		txt = _vpsearch.val();
+	  	  		index = txt.indexOf(',');
+	  	  		pname = txt.substr(0,index);
+	  	 		// getproductbypname($pname,true);
+	    	 
+	    	 	_getproduct(pname,_vcname.val(),_vsdate.val());
+	    		$("#txtpsearch").val('');
+			}
+		}
+    });
+	
+});
 
 /**
  * 正则检查价格格式
@@ -192,6 +304,8 @@ function checkcustomorder(){
 
 
 
+
+
 function getproductbypname(pname,isquick){
 	var arequest = $.ajax({
         url:"<?php echo base_url()?>ajax/getproductbyname",
@@ -209,6 +323,7 @@ function getproductbypname(pname,isquick){
     	
         $("#txtpset").val(obj.pset);
         $("#inprice").val(obj.pprice);
+        alert(obj.pset);
         var pricerequest = $.ajax({
         url:"<?php echo base_url()?>ajax/getproductprice",
         type:"POST",
@@ -313,26 +428,7 @@ $(function(){
 
      <?php //快速搜索产品栏代码?>
     		 $(function() {
-    			    var availableTags = [
-    			        <?php $_ii =0;?>
-    			      <?php foreach($product_list as $item) :?>
-    			       <?php           if($_ii>0){
-    			                      echo ',';
-    			                  } ?>
-    			   '<?php echo $item->pname;$_ii++; ?>'
-    			    <?php endforeach;?>
-    			    ];
-    			    $( "#txtpsearch" ).autocomplete({
-    			      source: availableTags,
-    			      close: function( event, ui ) {
-    			    	  $("#hidden_cindex").val("0");
-    			    	  $txt = $("#txtpsearch").val();
-    			    	  $index = $txt.indexOf(',');
-    			    	  $pname = $txt.substr(0,$index);
-    			    	  getproductbypname($pname,true);
-    			    	  $("#txtpsearch").val('');
-    						}
-    			    });
+
     			  });	     
     
 </script>    
@@ -888,6 +984,7 @@ function showmessage(msg){
              订单提交中
 </div>   
      <div id="dialog-addproduct" title="添加产品">
+     
          <table>
              <tr>
                  <td>产品名称</td><td><input id="txtpname" type="text" readonly></input><a id="selectpro" href="#">选择产品</a></td>
@@ -934,6 +1031,7 @@ function showmessage(msg){
     
     
 <div id="container">
+<p class="validateTips1">所有的的值不能为空</p>
     <div id="cname" >
         <p>
          客户名称 <?php

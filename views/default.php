@@ -101,6 +101,11 @@
             <div class="folder">财务管理</div>
             <div class="list">
                 <a href="/gonghuodan/index" class="item" target="main">供货单管理</a>
+            <?php  if(isset($username) && ($username=="admin"||$username=='mastao')):?>
+
+                <a href="/gonghuodan/yuebill" class="item" target = "main">月账单</a>
+                <?php endif;?>
+                                
                            <a href="/gonghuodan/createghd" class="item" target="main">生成供货单</a>
             <?php  if(isset($username) && $username=="admin"):
         
@@ -108,7 +113,7 @@
                 <a href="/gonghuodan/suodan" class="item" target="main">锁单</a>
  
                 <a href="/gonghuodan/pay" class="item" target="main">打款</a>
-                <a href="/gonghuodan/testupload" class="item lastItem" target="main">测试上传</a>
+                 <a href="/gonghuodan/testupload" class="item lastItem" target="main">测试上传</a>
                 <?php endif;?>
             </div>
             <?php  if(isset($username) && $username=="admin"):

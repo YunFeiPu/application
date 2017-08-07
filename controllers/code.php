@@ -37,8 +37,8 @@ class Code extends CI_Controller {
     	$this->load->model('gonghuodan_m');
     	
     	$j = 0;
-    for($i = strtotime('2017-06-01'); $i< strtotime('2017-06-30'); $i +=84600){
-    $y = mktime(0,0,0,06,01,2017);
+    for($i = strtotime('2017-07-01'); $i< strtotime('2017-07-31'); $i +=84600){
+    $y = mktime(0,0,0,07,01,2017);
     $date = date("Y-m-d",$y+$j*24*3600);
     $j++;
     

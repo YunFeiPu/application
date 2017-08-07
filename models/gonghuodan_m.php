@@ -224,9 +224,17 @@ class Gonghuodan_m extends CI_Model {
 	 * @param unknown $gys_id
 	 * @return unknown|NULL
 	 */
-	function getghdlistbygysid($gys_id){
+	function getghdlistbygysid($gys_id,$date=""){
+		if($date == ""){
 		$sql = "SELECT gongyingshang.gys_id,  gys_name,ghd_date,ghd_jine,ghd_jiesuan_jine,ghd_id FROM gonghuodan left join gongyingshang on gonghuodan.id_gys = gongyingshang.gys_id where gys_id = ? order by ghd_date asc ";
+		
 		$query = $this->db->query($sql,array($gys_id));
+		}else{
+			$sql = "SELECT gongyingshang.gys_id,  gys_name,ghd_date,ghd_jine,ghd_jiesuan_jine,ghd_id FROM gonghuodan left join gongyingshang on gonghuodan.id_gys = gongyingshang.gys_id where gys_id = ? and ghd_date between ? and ? order by ghd_date asc ";
+			$query = $this->db->query($sql,array($gys_id, $date.'-01',$date.'-31'));
+			
+			
+		}
 		if($query->num_rows()>0){
 			return $query->result();
 		}

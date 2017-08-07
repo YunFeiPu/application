@@ -14,6 +14,30 @@ class Gonghuodan extends CI_Controller {
 		$this->db->query($sql, array($id));
 	}
 	
+	function yuebill(){
+		parent::islogin();
+		
+		$sql = "
+			select gys_id,description,heji from (
+				SELECT description, sum(b1.qty*b1.inprice) as `heji`  from(
+
+SELECT a1.*,  productcategory.description from(
+SELECT `order`.*,`product`.`categoryid`,`product`.`pprice` as `inprice`  from `order` LEFT JOIN `product` on `order`.`pid`  = `product`.`id` 
+    where otime BETWEEN ? and ?
+    
+    )as a1 
+
+LEFT JOIN `productcategory` on   a1.categoryid = `productcategory`.`id` 
+      )
+as b1 GROUP BY description 
+				) as c1 left join gongyingshang on gongyingshang.gys_name = description order by gys_id asc;
+				
+				";
+		$query = $this->db->query($sql,array("2017-07-01","2017-07-31"));
+		$data["item_list"] = $query->result();
+		$this->load->view('gonghuodan/yuezhangdan',$data);
+	}
+	
 	/***
 	 * 供货单
 	 */
@@ -42,8 +66,9 @@ class Gonghuodan extends CI_Controller {
 	function getghdlistbygys(){
 		parent::islogin();
 		$gys_id = $this->uri->segment(3,0);
+		$smonth = $this->uri->segment("2017-07","");
 		$this->load->model('gonghuodan_m');
-		$query = $this->gonghuodan_m->getghdlistbygysid($gys_id);
+		$query = $this->gonghuodan_m->getghdlistbygysid($gys_id,'2017-07');
 		if(isset($query)){
 			$data["ghd_list"] = $query;
 		}
@@ -59,7 +84,7 @@ class Gonghuodan extends CI_Controller {
 
 SELECT a1.* from(
 SELECT `order`.*,`product`.`categoryid`,`product`.`pprice` as `inprice`  from `order` LEFT JOIN `product` on `order`.`pid`  = `product`.`id` 
-    where otime BETWEEN '2017-06-01' and '2017-06-31'
+    where otime BETWEEN '2017-07-01' and '2017-07-31'
     )as a1 
 
 LEFT JOIN `productcategory` on   a1.categoryid = `productcategory`.`id` where `productcategory`.`description` = ? )
@@ -291,7 +316,7 @@ VALUES
 		}
 		
 		$data['order_date'] = $order_date;
-		$sql = "select sum(ghd_jine) as heji ,ghd_date,count(*) as jishu from gonghuodan group by ghd_date order by ghd_date desc limit 0,30;";
+		$sql = "select sum(ghd_jine) as heji ,ghd_date,count(*) as jishu from gonghuodan where date_format(ghd_date,'%Y-%m')=date_format(DATE_SUB(curdate(), INTERVAL 1 MONTH),'%Y-%m') group by ghd_date order by ghd_date desc limit 0,30;";
 		$query= $this->db->query($sql,array($order_date));
 		$data['item_list'] = $query->result();
 

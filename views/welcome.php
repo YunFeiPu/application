@@ -78,6 +78,24 @@
 	<h1>欢迎使用ERP</h1>
 
 	<div id="body">
+	<pre class='xdebug-var-dump' dir='ltr'>
+<small>C:\wamp64\www\application\controllers\ajax.php:22:</small>
+<b>object</b>(<i>stdClass</i>)[<i>18</i>]
+  <i>public</i> 'pid' <font color='#888a85'>=&gt;</font> <small>int</small> <font color='#4e9a06'>369</font>
+  <i>public</i> 'pprice' <font color='#888a85'>=&gt;</font> <small>int</small> <font color='#4e9a06'>12</font>
+  <i>public</i> 'sprice' <font color='#888a85'>=&gt;</font> <small>int</small> <font color='#4e9a06'>15</font>
+  <i>public</i> 'groupprice' <font color='#888a85'>=&gt;</font> 
+    <b>array</b> <i>(size=2)</i>
+      0 <font color='#888a85'>=&gt;</font> 
+        <b>object</b>(<i>stdClass</i>)[<i>19</i>]
+          <i>public</i> 'old' <font color='#888a85'>=&gt;</font> <small>int</small> <font color='#4e9a06'>15</font>
+          <i>public</i> 'new' <font color='#888a85'>=&gt;</font> <small>int</small> <font color='#4e9a06'>15</font>
+      1 <font color='#888a85'>=&gt;</font> 
+        <b>object</b>(<i>stdClass</i>)[<i>20</i>]
+          <i>public</i> 'old' <font color='#888a85'>=&gt;</font> <small>int</small> <font color='#4e9a06'>20</font>
+          <i>public</i> 'new' <font color='#888a85'>=&gt;</font> <small>int</small> <font color='#4e9a06'>20</font>
+  <i>public</i> 'sdate' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'2017-05-02'</font> <i>(length=10)</i>
+</pre>
 		<p>在这里你可以操作您的erp系统数据</p>
 		<code>2014-07-08: <br>修正订单无法下载的错误;<br /> 订单查看页面支持时间区间搜索;<br>同一天同一个客户只能开一个订单;<br>
 		订单查看页增加排序功能;
